@@ -3,5 +3,5 @@ package br.edu.cafeteria.servico;
 import br.edu.cafeteria.modelo.Pedido;
 
 public interface Promocional {
-	void aplicarDesconto(Pedido pedido);
+    void aplicarDesconto(Pedido pedido);
 }
