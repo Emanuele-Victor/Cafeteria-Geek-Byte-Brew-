@@ -1,25 +1,19 @@
 package br.edu.cafeteria.modelo;
+
 public abstract class Cliente {
-    private String nome;
     private String cpf;
-    private double saldoXP;
+    private String nome;
+    protected double saldoXP;
 
-    public Cliente(String nome, String cpf, double saldoXP) {
-        this.nome = nome;
+    public Cliente(String cpf, String nome) {
         this.cpf = cpf;
-        this.saldoXP = saldoXP;
+        this.nome = nome;
+        this.saldoXP = 0; // 
     }
 
-    public abstract double calcularXPGanhado(double valorGasto);
-
-    public void adicionarXP(double valorGasto) {
-        this.saldoXP += calcularXPGanhado(valorGasto);
-    }
-
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }
-    public void setCpf(String cpf) { this.cpf = cpf; }
+    public String getNome() { return nome; }
     public double getSaldoXP() { return saldoXP; }
-    public void setSaldoXP(double saldoXP) { this.saldoXP = saldoXP; }
+    
+    public abstract void adicionarXP(double valorCompra);
 }
