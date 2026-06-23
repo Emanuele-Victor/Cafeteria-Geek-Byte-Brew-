@@ -12,7 +12,6 @@ public class Pedido {
 
     public Pedido() {
         this.id = contadorSequencial++;
-        
         this.itens = new ArrayList<>();
     }
 
@@ -23,5 +22,13 @@ public class Pedido {
     public List<ItemPedido> getItens() {
         return itens;
     }
-    
+
+    public void adicionarItem(Produto p) {
+       this.adicionarItem(p, 1);
+    }
+ 
+    public void adicionarItem(Produto p, int quantidade) {        
+        ItemPedido novoItem = new ItemPedido(p, quantidade);        
+        this.itens.add(novoItem);
+    }
 }
