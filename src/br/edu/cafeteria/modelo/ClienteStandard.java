@@ -1,8 +1,8 @@
 package br.edu.cafeteria.modelo;
 
-public class ClienteStandart extends Cliente {
+public class ClienteStandard extends Cliente {
 
-    public ClienteStandart(String nome, String cpf, double saldoXP) {
+    public ClienteStandard(String nome, String cpf, double saldoXP) {
         super(nome, cpf, saldoXP);
     }
 
