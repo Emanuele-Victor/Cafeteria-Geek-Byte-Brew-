@@ -1,5 +1,4 @@
 package br.edu.cafeteria.modelo;
-
 public abstract class Cliente {
     private String nome;
     private String cpf;
@@ -12,6 +11,11 @@ public abstract class Cliente {
     }
 
     public abstract double calcularXPGanhado(double valorGasto);
+
+    public void adicionarXP(double valorGasto) {
+        this.saldoXP += calcularXPGanhado(valorGasto);
+    }
+
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }
