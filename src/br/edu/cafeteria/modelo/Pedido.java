@@ -8,6 +8,8 @@ public class Pedido {
     private static int contadorSequencial = 1;
     private int id;
     private List<ItemPedido> itens;
+    
+    private Cliente cliente; 
 
     public Pedido() {
         this.id = contadorSequencial++;
@@ -16,6 +18,9 @@ public class Pedido {
 
     public int getId() { return id; }
     public List<ItemPedido> getItens() { return itens; }
+    
+    public Cliente getCliente() { return cliente; }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
     public void adicionarItem(Produto p) throws EstoqueInsuficienteException {
         this.adicionarItem(p, 1);
@@ -30,5 +35,13 @@ public class Pedido {
         this.itens.add(novoItem);
         
         p.setQuantidadeEstoque(p.getQuantidadeEstoque() - quantidade);
+    }
+    
+    public double calcularTotal() {
+        double total = 0;
+        for (ItemPedido item : itens) {
+            total += item.calcularSubtotal();
+        }
+        return total;
     }
 }
