@@ -42,4 +42,11 @@ public class Pedido {
         
         p.setQuantidadeEstoque(p.getQuantidadeEstoque() - quantidade);
     }
+    public double calcularTotal() {
+        double total = 0;
+        for (ItemPedido item : itens) {
+            total += item.calcularSubtotal();
+        }
+        return total;
+    }
 }
