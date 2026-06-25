@@ -6,7 +6,6 @@ public abstract class Produto {
     private double precoBase;
     private int quantidadeEstoque;
 
-    
     public Produto(String codigo, String nome, double precoBase, int quantidadeEstoque) {
         this.codigo = codigo;
         this.nome = nome;
@@ -17,13 +16,22 @@ public abstract class Produto {
     public String getCodigo() {
         return codigo;
     }
+    // Nota: Não existe setCodigo() porque o código é um identificador único
 
     public String getNome() {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public double getPrecoBase() {
         return precoBase;
+    }
+
+    public void setPrecoBase(double precoBase) {
+        this.precoBase = precoBase;
     }
 
     public int getQuantidadeEstoque() {
@@ -33,5 +41,4 @@ public abstract class Produto {
     public void setQuantidadeEstoque(int quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
     }
-    
 }

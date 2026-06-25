@@ -14,6 +14,11 @@ public class Comida extends Produto {
     }
 
     public int getTempoPreparoMinutos() { return tempoPreparoMinutos; }
+    public void setTempoPreparoMinutos(int tempoPreparoMinutos) { this.tempoPreparoMinutos = tempoPreparoMinutos; }
+
     public boolean isVegano() { return isVegano; }
+    public void setVegano(boolean isVegano) { this.isVegano = isVegano; }
+
     public boolean isSemGluten() { return isSemGluten; }
+    public void setSemGluten(boolean isSemGluten) { this.isSemGluten = isSemGluten; }
 }
