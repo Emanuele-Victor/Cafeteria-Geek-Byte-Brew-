@@ -1,0 +1,13 @@
+./br/edu/cafeteria/app/Main.java
+./br/edu/cafeteria/excecao/EstoqueInsuficienteException.java
+./br/edu/cafeteria/excecao/PontosInsuficientesException.java
+./br/edu/cafeteria/modelo/Bebida.java
+./br/edu/cafeteria/modelo/Cliente.java
+./br/edu/cafeteria/modelo/ClienteStandard.java
+./br/edu/cafeteria/modelo/ClienteVIP.java
+./br/edu/cafeteria/modelo/Comida.java
+./br/edu/cafeteria/modelo/ItemPedido.java
+./br/edu/cafeteria/modelo/Pedido.java
+./br/edu/cafeteria/modelo/Produto.java
+./br/edu/cafeteria/servico/package-info.java
+./br/edu/cafeteria/servico/Promocional.java
