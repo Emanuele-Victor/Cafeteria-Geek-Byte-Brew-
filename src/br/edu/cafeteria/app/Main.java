@@ -8,18 +8,19 @@ import br.edu.cafeteria.modelo.ClienteStandard;
 import br.edu.cafeteria.modelo.ClienteVIP;
 import br.edu.cafeteria.modelo.Pedido;
 import br.edu.cafeteria.excecao.EstoqueInsuficienteException;
+import br.edu.cafeteria.excecao.PontosInsuficientesException;
+import br.edu.cafeteria.servico.Promocional;
+import br.edu.cafeteria.servico.DescontoEventoGeek;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    
-    // REQUISITO: Listas estáticas para servir de banco de dados (Tarefa 14)
+
     public static List<Produto> cardapio = new ArrayList<>();
     public static List<Cliente> clientesCadastrados = new ArrayList<>();
 
-    // --- INÍCIO DOS MÉTODOS DO DENILSON ---
     public static void cadastrarCliente(Scanner scanner) {
         System.out.println("\n--- Cadastro de Cliente ---");
         System.out.print("Digite o CPF: ");
@@ -28,7 +29,7 @@ public class Main {
         String nome = scanner.nextLine();
         System.out.print("Tipo de Cliente (1 - Standard, 2 - VIP): ");
         int tipo = scanner.nextInt();
-        scanner.nextLine(); // Limpar o buffer
+        scanner.nextLine();
 
         if (tipo == 1) {
             clientesCadastrados.add(new ClienteStandard(cpf, nome));
@@ -55,11 +56,11 @@ public class Main {
 
     public static void novaVenda(Scanner scanner) {
         System.out.println("\n--- Nova Venda (Abertura de Pedido) ---");
-        Pedido pedido = new Pedido(); 
-        
+        Pedido pedido = new Pedido();
+
         System.out.print("Deseja identificar o cliente? (S/N): ");
         String identificar = scanner.nextLine();
-        
+
         if (identificar.equalsIgnoreCase("S")) {
             System.out.print("Digite o CPF do cliente: ");
             String cpfBusca = scanner.nextLine();
@@ -79,7 +80,7 @@ public class Main {
         while (adicionandoItens) {
             System.out.print("\nDigite o Código do Produto (ou 'F' para finalizar itens): ");
             String codigo = scanner.nextLine();
-            
+
             if (codigo.equalsIgnoreCase("F")) {
                 adicionandoItens = false;
                 continue;
@@ -96,7 +97,7 @@ public class Main {
             if (produtoEncontrado != null) {
                 System.out.print("Digite a quantidade desejada: ");
                 int qtd = scanner.nextInt();
-                scanner.nextLine(); 
+                scanner.nextLine();
 
                 try {
                     pedido.adicionarItem(produtoEncontrado, qtd);
@@ -108,27 +109,66 @@ public class Main {
                 System.out.println("Produto não encontrado no cardápio.");
             }
         }
-        System.out.println("\nResumo: Pedido #" + pedido.getId() + " gerado. Total parcial: R$ " + pedido.calcularTotal());
+
+        System.out.print("\nÉ Dia de Evento Geek? (S/N): ");
+        String eventoGeek = scanner.nextLine();
+
+        if (eventoGeek.equalsIgnoreCase("S")) {
+            Promocional promo = new DescontoEventoGeek();
+            promo.aplicarDesconto(pedido);
+        }
+
+        System.out.println("\nResumo: Pedido #" + pedido.getId() + " gerado.");
+        System.out.println("Subtotal: R$ " + pedido.calcularTotal());
+        System.out.println("Desconto: R$ " + pedido.getDesconto());
+        System.out.println("Total a pagar: R$ " + pedido.getValorComDesconto());
+
+        Cliente cliente = pedido.getCliente();
+        if (cliente != null) {
+            double valorFinal = pedido.getValorComDesconto();
+
+            if (cliente instanceof ClienteVIP) {
+                ClienteVIP vip = (ClienteVIP) cliente;
+                System.out.print("Cliente VIP deseja pagar com XP? (S/N): ");
+                String pagarXP = scanner.nextLine();
+
+                if (pagarXP.equalsIgnoreCase("S")) {
+                    try {
+                        vip.pagarComXP(valorFinal);
+                        System.out.println("Pagamento realizado com XP! Saldo restante: " + vip.getSaldoXP());
+                    } catch (PontosInsuficientesException e) {
+                        System.out.println("❌ " + e.getMessage());
+                        cliente.adicionarXP(valorFinal);
+                        System.out.println("Pagamento realizado em dinheiro. Novo saldo XP: " + cliente.getSaldoXP());
+                    }
+                } else {
+                    cliente.adicionarXP(valorFinal);
+                    System.out.println("Pagamento realizado em dinheiro. Novo saldo XP: " + cliente.getSaldoXP());
+                }
+            } else {
+                cliente.adicionarXP(valorFinal);
+                System.out.println("Pagamento realizado em dinheiro. Novo saldo XP: " + cliente.getSaldoXP());
+            }
+        }
     }
-    // --- FIM DOS MÉTODOS DO DENILSON ---
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int opcao = 0;
 
-        while (opcao != 7) { // Expandido para 7 opções
+        while (opcao != 7) {
             System.out.println("\n--- MENU CAFETERIA (BYTE & BREW) ---");
-            System.out.println("1. Cadastrar Produto (Manu)");
-            System.out.println("2. Listar Produtos (Manu)");
-            System.out.println("3. Remover Produto (Manu)");
-            System.out.println("4. Cadastrar Novo Cliente (Denilson)");
-            System.out.println("5. Listar Clientes (Denilson)");
-            System.out.println("6. Abrir Nova Venda (Denilson)");
+            System.out.println("1. Cadastrar Produto");
+            System.out.println("2. Listar Produtos");
+            System.out.println("3. Remover Produto");
+            System.out.println("4. Cadastrar Novo Cliente");
+            System.out.println("5. Listar Clientes");
+            System.out.println("6. Abrir Nova Venda");
             System.out.println("7. Sair");
             System.out.print("Escolha uma opcao: ");
-            
+
             opcao = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (opcao) {
                 case 1:
@@ -192,7 +232,7 @@ public class Main {
                     } else {
                         System.out.print("Digite o codigo do produto a remover: ");
                         String codRemover = scanner.nextLine();
-                        
+
                         boolean removido = false;
                         for (int i = 0; i < cardapio.size(); i++) {
                             if (cardapio.get(i).getCodigo().equals(codRemover)) {
